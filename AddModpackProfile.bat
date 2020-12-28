@@ -1,7 +1,8 @@
 @echo off
 
 setlocal enableextensions enabledelayedexpansion
-
+echo
+echo Adding modpack profile to Launcher
 echo Defining Variables
 
 :: Define Source
