@@ -18,6 +18,9 @@ set input=%source%\launcher_profiles.json
 set tempfile=%source%\%random%-%random%.json
 copy /y nul "%tempfile%"
 
+:: Define looking for thing
+set searchKey=  "profiles" : {
+
 :: -----------------------------------------------
 
 echo Checking for GAMES_Modpack1.0...
@@ -38,13 +41,21 @@ echo Copying first half of profiles...
 set line=1
 for /f "delims=" %%1 in ('type "%input%"') do (
 	set /a line+=1
-	if !line!==22 (
-		echo Complete.
-		goto Add_Profile
+	if !line! gtr 18 (
+		if "%%1" == "%searchKey%" (
+			echo %%1>>"%tempfile%"
+			echo Complete.
+			goto Add_Profile
+		) else (
+			echo %%1>>"%tempfile%"
+		)
 	) else (
 		echo %%1>>"%tempfile%"
 	)
 )
+
+echo stop
+pause
 
 :Add_Profile
 
@@ -69,17 +80,28 @@ echo Copying final half of profiles...
 
 :: Copy remaining lines. NOTE: Can't seem to copy the picture for the Forge Profile.
 set line=0
+set go=0
+
 for /f "delims=" %%1 in ('type "%input%"') do (
 	set /a line+=1
-	if !line! gtr 20 (
-		if %%1==End (
-			echo Complete.
-			goto Finish
-		) else (
-			echo %%1>>"%tempfile%"
+	if !go!==0 (
+		if "%%1" == "%searchKey%" (
+			set /a go=!line!
 		)
+	) else (
+		if !line! gtr !go! (
+			if %%1==End (
+				echo Complete.
+				goto Finish
+			) else (
+				echo %%1>>"%tempfile%"
+			)
+		)		
 	)
 )
+
+echo stop
+pause
 
 :: -----------------------------------------------
 
