@@ -3,6 +3,7 @@ echo Loading setup...
 setlocal ENABLEDELAYEDEXPANSION
 title GAMES Modpack Installer
 set installFolder=%appdata%\.minecraft
+IF NOT EXIST %installFolder%\ goto Fail
 set profileFile=%appdata%\.minecraft\launcher_profiles.json
 set forgeInstall=forge-1.16.4-35.1.4-installer.jar
 set modpackFolder=%installFolder%\profiles\GAMES_Modpack1.0
@@ -22,5 +23,9 @@ if exist "%installFolder%\versions\1.16.4-forge-35.1.4\1.16.4-forge-35.1.4.jar" 
 	echo n | copy /-y "%cd%\mods" "%modpackFolder%\mods"
 ) ELSE ("echo ERROR: Forge-35.1.4.jar does not exist")
 CALL AddModpackProfile.bat
+goto End
+:Fail
+echo [Error] Minecraft is not installed, may need to install mods manually
+:End
 pause
 
